@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,12 +8,14 @@ datasource db {
 }
 
 model Pokemon {
-  id             Int     @id @default(autoincrement())
-  name           String
-  types          String?
-  height         Int?
-  weight         Int?
-  abilities      String?
-  baseExperience Int?
-  imageUrl       String?
+  id          Int      @id @default(autoincrement())
+  name        String
+  pokeApiId   Int?     @unique
+  types       String?
+  height      Float?   
+  weight      Float?   
+  abilities   String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())  
+  updatedAt   DateTime @updatedAt
 }

@@ -35,7 +35,7 @@ describe("Pokemon Controller", () => {
         {
           id: 1,
           name: "Bulbasaur",
-          types: "Grass,Poison", // String, not array
+          types: "Grass,Poison",
           pokeApiId: null,
           height: null,
           weight: null,

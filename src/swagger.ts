@@ -1,4 +1,11 @@
 import swaggerJsdoc from "swagger-jsdoc";
+import path from "path";
+import fs from "fs";
+
+const useJsFiles =
+  process.env.NODE_ENV === "production" ||
+  !fs.existsSync(path.resolve(__dirname, "../src/routes"));
+const routesPath = useJsFiles ? "./routes/*.js" : "../src/routes/*.ts";
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -10,12 +17,12 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: "http://localhost:3001",
+        url: "http://localhost:3000",
         description: "Development server",
       },
     ],
   },
-  apis: ["./src/routes/*.ts"],
+  apis: [path.join(__dirname, routesPath)],
 };
 
 const specs = swaggerJsdoc(options);

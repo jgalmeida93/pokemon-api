@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
     ports:
       - "3000:3000"
     environment:
@@ -12,11 +14,15 @@ services:
       - DATABASE_URL=file:/app/data/dev.db
     volumes:
       - ./data:/app/data
+      - ./prisma:/app/prisma
     command: >
       sh -c "
+        apt-get update && 
+        apt-get install -y openssl curl sqlite3 && 
         mkdir -p /app/data && 
         touch /app/data/dev.db && 
-        chmod 777 /app/data/dev.db && 
+        chmod 777 /app/data /app/data/dev.db && 
+        npx prisma generate && 
         npx prisma migrate deploy && 
         npm start
       "

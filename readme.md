@@ -40,33 +40,25 @@ cd pokemon-api
 npm install
 ```
 
-3. Set up environment variables:
+## Running the Application Locally
+
+1. Set up environment variables:
 
 ```bash
 cp .env.example .env
 ```
 
-4. Generate Prisma client:
+2. Generate Prisma client:
 
 ```bash
 npm run prisma:generate
 ```
 
-5. Run database migrations:
+3. Run database migrations:
 
 ```bash
 npm run prisma:migrate
 ```
-
-## Running the Application
-
-### Development Mode
-
-```bash
-npm run dev
-```
-
-or
 
 ### Running with Docker
 

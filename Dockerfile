@@ -1,40 +1,47 @@
-FROM node:18-alpine as builder
+
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files and install dependencies
+
+RUN apk add --no-cache openssl curl
+
+
 COPY package*.json ./
 RUN npm install
 
-# Copy source code
+
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
 
-# Build TypeScript code
+RUN npx prisma generate
 RUN npm run build
 
-# Production stage
+
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy built app
+
+RUN apk add --no-cache openssl curl
+
+
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma
 
-# Expose API port
-EXPOSE 3000
 
-# Set environment variables
+RUN mkdir -p /app/data && \
+    touch /app/data/dev.db && \
+    chmod 666 /app/data/dev.db
+
+
 ENV NODE_ENV=production
 ENV DATABASE_URL=file:/app/data/dev.db
 
-# Create directory for SQLite database
-RUN mkdir -p /app/data
 
-# Run migrations and start app
+EXPOSE 3000
+
+
 CMD npx prisma migrate deploy && node dist/index.js
